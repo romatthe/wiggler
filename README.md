@@ -1,7 +1,9 @@
 Wiggler
 =======
 
-`Wiggler` is a command-line application for periodically wiggling your mouse. Do your admins control your power settings, but don't want to dim your screen? Just wiggle your mouse with `Wiggler`. :bug:
+`Wiggler` is a command-line application for periodically wiggling your mouse. Do your admins control your power settings, but don't want to dim your screen? Just wiggle your mouse with `Wiggler`.
+
+![Wiggler!](https://www.mariowiki.com/images/thumb/7/7c/WigglerDS.png/250px-WigglerDS.png)
 
 Get Wiggler
 -----------
