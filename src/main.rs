@@ -1,10 +1,14 @@
 extern crate clap;
-use clap::{Arg, App};
+extern crate enigo;
+extern crate rand;
 
+use clap::{Arg, App};
+use enigo::*;
+use rand::distributions::{IndependentSample, Range};
 use std::str::FromStr;
 use std::sync::mpsc::sync_channel;
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 
 struct WiggleRequest;
 
@@ -24,7 +28,9 @@ fn main() {
         .get_matches();
 
     let (sender, receiver) = sync_channel(1);
-    let seconds = u64::from_str(matches.value_of("time").unwrap());
+    let seconds = u64::from_str(matches.value_of("time").unwrap()).unwrap();
+
+    println!("Wiggle wiggle wiggle! Moving the mouse every {} seconds", seconds);
 
     thread::spawn(move || {
         loop {
@@ -33,20 +39,28 @@ fn main() {
         }
     });
 
+    let between = Range::new(-1000, 1000);
+    let mut rng = rand::thread_rng();
+    let mut enigo = Enigo::new();
+
     loop {
         match receiver.recv() {
-            Ok(WiggleRequest)   => println!("Wiggle Wiggle Wiggle!"),
-            Err(_)              => println!("Something went wrong while wiggling!")
+            Ok(WiggleRequest) => {
+                enigo.mouse_move_relative(between.ind_sample(&mut rng), between.ind_sample(&mut rng));
+                enigo.mouse_move_relative(between.ind_sample(&mut rng), between.ind_sample(&mut rng));
+                enigo.mouse_move_relative(between.ind_sample(&mut rng), between.ind_sample(&mut rng));
+            },
+
+            Err(_) => println!("Something went wrong while wiggling!")
         }
     }
-
 }
 
 fn is_duration(val: String) -> Result<(), String> {
     let result = u64::from_str(&val);
 
     match result {
-        Ok(_) => /* Ok(Duration::from_secs(seconds)), */ Ok(()),
+        Ok(_) => Ok(()),
         Err(_) => Err("Failed to parse the duration. Please provide a duration in seconds.".to_string())
     }
 }
