@@ -8,6 +8,7 @@ use rand::distributions::{IndependentSample, Range};
 use std::str::FromStr;
 use std::sync::mpsc::sync_channel;
 use std::thread;
+use std::time::Duration;
 
 struct WiggleRequest;
 
